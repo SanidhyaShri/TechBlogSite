@@ -1,0 +1,42 @@
+<!-- After using base.html file. -->
+
+{% extends 'posts/base.html' %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+    <a href="{% url 'add_post' %}" class="btn btn-primary mb-3">
+        + Add New Post
+    </a>
+{% endif %}
+
+{% for post in posts %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">{{ post.title }}</h5>
+            <h5 class="card-title">
+                <a href="{% url 'post_detail' post.id %}">
+                    {{ post.title }}
+                </a>
+            </h5>
+
+            <p class="text-muted mb-1">
+                By <strong>{{ post.author.username }}</strong>
+                • {{ post.created_at|date:"M d, Y" }}
+                • {{ post.created_at|time:"h:i A" }}
+            </p>
+
+
+            <p class="card-text">{{ post.content }}</p>
+
+            {% if user == post.author %}
+                <a href="{% url 'edit_post' post.id %}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="{% url 'delete_post' post.id %}" class="btn btn-sm btn-danger">Delete</a>
+            {% endif %}
+
+        </div>
+    </div>
+{% endfor %}
+
+{% endblock %}
+
